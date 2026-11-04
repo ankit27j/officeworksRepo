@@ -1,0 +1,18 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "module": "CommonJS",
+    "moduleResolution": "Node10",
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
+    "declaration": false,
+    // Lets ts-jest transpile file-by-file (fast); full type checking is done by `npm run typecheck`.
+    "isolatedModules": true,
+    "types": ["node", "jest"],
+    // Typecheck + tests read the contract from source, so no build step is needed first.
+    "paths": {
+      "@catalogue/contracts": ["../../packages/contracts/src/index.ts"]
+    }
+  },
+  "include": ["src", "prisma", "test"]
+}

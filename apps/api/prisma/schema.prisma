@@ -1,0 +1,58 @@
+// Business-owned data only. Product data is NOT stored here; it comes from the configured ProductSource.
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum FeaturedScope {
+  HOME
+  CATEGORY
+}
+
+/// Products the business has chosen to feature ("top rated").
+model FeaturedProduct {
+  id           String        @id @default(uuid())
+  scope        FeaturedScope
+  /// Null when scope = HOME.
+  categorySlug String?       @map("category_slug")
+  /// Id in the active ProductSource. A string so it doesn't depend on one source's id format.
+  productId    String        @map("product_id")
+  /// Display order, ascending.
+  position     Int
+  createdAt    DateTime      @default(now()) @map("created_at")
+
+  @@unique([scope, categorySlug, productId])
+  @@index([scope, categorySlug, position])
+  @@map("featured_products")
+}
+
+enum EnquiryStatus {
+  RECEIVED
+  EMAILED
+  EMAIL_FAILED
+}
+
+/// A customer enquiry (sales lead). Saved before the email is sent, so a failed email never loses a lead.
+model Enquiry {
+  id           String        @id @default(uuid())
+  productId    String        @map("product_id")
+  /// Title when the enquiry was made; the product source may change or drop the product later.
+  productTitle String        @map("product_title")
+  name         String        @db.VarChar(100)
+  email        String        @db.VarChar(254)
+  phone        String?       @db.VarChar(30)
+  message      String        @db.VarChar(2000)
+  status       EnquiryStatus @default(RECEIVED)
+  /// Why the sales email failed, for follow-up or retry.
+  emailError   String?       @map("email_error")
+  createdAt    DateTime      @default(now()) @map("created_at")
+  updatedAt    DateTime      @updatedAt @map("updated_at")
+
+  @@index([status, createdAt])
+  @@map("enquiries")
+}

@@ -1,0 +1,32 @@
+{
+  "name": "@catalogue/contracts",
+  "version": "0.1.0",
+  "private": true,
+  "description": "API contract shared by the web client and the API: Zod schemas + inferred types.",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsup --watch",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "zod": "^4.6.7"
+  },
+  "devDependencies": {
+    "tsup": "^8.3.5",
+    "vitest": "^3.2.7"
+  }
+}

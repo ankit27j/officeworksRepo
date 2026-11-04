@@ -1,0 +1,12 @@
+.root {
+  /* Layout sizing lives here (not in tokens.ts) because CSS variables can't be set from TS without
+     inline styles. Brand colours, fonts and radii stay in tokens.ts. */
+  --app-content-max-width: 1200px;
+  --app-product-card-min-width: 220px;
+  --app-product-image-height: 200px;
+
+  min-height: 100vh;
+  background: var(--ant-color-bg-layout);
+  color: var(--ant-color-text);
+  font-family: var(--ant-font-family);
+}

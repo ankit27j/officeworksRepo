@@ -1,0 +1,30 @@
+.breadcrumb {
+  margin-bottom: var(--ant-margin-lg);
+}
+
+.layout {
+  display: grid;
+  grid-template-columns: minmax(0, 2fr) minmax(0, 3fr);
+  gap: var(--ant-margin-xl);
+  align-items: start;
+}
+
+.media {
+  display: flex;
+  justify-content: center;
+  padding: var(--ant-padding-lg);
+  border-radius: var(--ant-border-radius-lg);
+  /* Product photos have white backgrounds; keep them on a light panel in both modes. */
+  background: var(--ant-color-white);
+}
+
+.image {
+  max-height: 420px;
+  object-fit: contain;
+}
+
+@media (width <= 768px) {
+  .layout {
+    grid-template-columns: 1fr;
+  }
+}

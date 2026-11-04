@@ -1,0 +1,7 @@
+.nowrap {
+  white-space: nowrap;
+}
+
+.star {
+  color: var(--ant-color-warning);
+}

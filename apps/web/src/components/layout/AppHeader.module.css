@@ -1,0 +1,49 @@
+.header {
+  max-width: var(--app-content-max-width);
+  margin: 0 auto;
+  padding: var(--ant-padding-sm) var(--ant-padding);
+}
+
+.top {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  grid-template-areas: 'brand search actions';
+  align-items: center;
+  gap: var(--ant-margin);
+}
+
+.brand {
+  grid-area: brand;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--ant-margin-xs);
+  font-size: var(--ant-font-size-heading-4);
+  font-weight: var(--ant-font-weight-strong);
+  color: var(--ant-color-text);
+  text-decoration: none;
+}
+
+.brand:hover {
+  color: var(--ant-color-primary);
+}
+
+.search {
+  grid-area: search;
+  max-width: 560px;
+  width: 100%;
+  justify-self: center;
+}
+
+.actions {
+  grid-area: actions;
+}
+
+/* Phones: search drops to its own full-width row. */
+@media (width <= 640px) {
+  .top {
+    grid-template-columns: 1fr auto;
+    grid-template-areas:
+      'brand actions'
+      'search search';
+  }
+}
