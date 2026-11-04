@@ -91,6 +91,7 @@ The next steps are in [DECISIONS.md](../DECISIONS.md#next-steps-with-another-day
 - ✅ Fresh copy of the repo: `npm ci` plus build took about 6 minutes on a slow Windows laptop.
 - ✅ The production API, laid out exactly as in its image, booted and served without a database.
 - ✅ `npm run dev` with no database or Docker, driven in headless Edge against the live Fake Store. Every acceptance criterion passed: the 5 chosen products in order; category top rated plus more; search showing only matches, via the button; tile → details; Enquire → "Thank you"; and the email in the inbox at :8025 with the right recipient, reply-to and product.
+- ✅ **Reviewer check from GitHub:** a fresh copy of this repository took `npm install` 2m48s and `npm run dev` 36s to start (Windows laptop). The full browser journey passed, and lint, typecheck and all 149 tests pass.
 - ✅ The compose health-check command behaves correctly against a healthy, unhealthy and unreachable API.
 - ✅ The UI was checked in headless Edge against the live API, including the full enquiry flow.
 - ⚠️ **`docker compose up --build` itself, and nginx, were not run on the build machine, which had no container runtime.** Each piece the images rely on was checked separately (above). The first full Docker run was on: _fill in after running it locally_.
