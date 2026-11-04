@@ -1,0 +1,28 @@
+.layout {
+  min-height: 100vh;
+}
+
+.header {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background: var(--ant-color-bg-container);
+  border-bottom: 1px solid var(--ant-color-border-secondary);
+}
+
+.main {
+  flex: 1;
+  padding: var(--ant-padding-lg) var(--ant-padding);
+}
+
+.container {
+  max-width: var(--app-content-max-width);
+  margin: 0 auto;
+}
+
+.footer {
+  padding: var(--ant-padding-lg) var(--ant-padding);
+  text-align: center;
+  color: var(--ant-color-text-secondary);
+  border-top: 1px solid var(--ant-color-border-secondary);
+}

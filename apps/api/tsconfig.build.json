@@ -1,0 +1,12 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "rootDir": ".",
+    "outDir": "dist",
+    "types": ["node"],
+    // Runtime build resolves the contract through node_modules (packages/contracts/dist).
+    "paths": {}
+  },
+  "include": ["src", "prisma"],
+  "exclude": ["**/*.spec.ts", "test", "dist"]
+}

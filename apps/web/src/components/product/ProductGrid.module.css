@@ -1,0 +1,8 @@
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(var(--app-product-card-min-width), 1fr));
+  gap: var(--ant-margin-lg);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}

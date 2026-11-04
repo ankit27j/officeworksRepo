@@ -1,0 +1,12 @@
+.alert {
+  margin-bottom: var(--ant-margin-lg);
+}
+
+/* Off-screen rather than display:none: some bots skip fields they can tell are hidden. */
+.honeypot {
+  position: absolute;
+  left: -10000px;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}

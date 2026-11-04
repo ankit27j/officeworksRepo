@@ -1,0 +1,17 @@
+{
+  "rules": {
+    "color-no-hex": [
+      true,
+      { "message": "Use a theme variable (var(--ant-…)); colours live in src/theme/tokens.ts" }
+    ],
+    "color-named": [
+      "never",
+      { "message": "Use a theme variable (var(--ant-…)); colours live in src/theme/tokens.ts" }
+    ],
+    "function-disallowed-list": [
+      ["rgb", "rgba", "hsl", "hsla"],
+      { "message": "Use a theme variable (var(--ant-…)); colours live in src/theme/tokens.ts" }
+    ],
+    "declaration-no-important": true
+  }
+}

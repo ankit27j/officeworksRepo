@@ -1,0 +1,102 @@
+# Whole stack, one command:  docker compose up --build   →  http://localhost:8080
+# Infrastructure only, for running the apps with npm (see README):  docker compose up -d db mailpit
+# Works without a .env file; values in .env (see .env.example) override the defaults below.
+name: product-catalogue
+
+x-database-url: &database-url postgresql://${POSTGRES_USER:-catalogue}:${POSTGRES_PASSWORD:-catalogue}@db:5432/${POSTGRES_DB:-catalogue}
+
+services:
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-catalogue}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-catalogue}
+      POSTGRES_DB: ${POSTGRES_DB:-catalogue}
+    ports:
+      - '${DB_PORT:-5432}:5432'
+    volumes:
+      - db-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}']
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+  # Local SMTP server + web inbox. Stands in for the sales inbox; no account or credentials needed.
+  mailpit:
+    image: axllent/mailpit:v1.20
+    ports:
+      - '${MAILPIT_UI_PORT:-8025}:8025'
+      - '${MAILPIT_SMTP_PORT:-1025}:1025'
+    healthcheck:
+      test: ['CMD', '/mailpit', 'readyz']
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+  # One-shot job: apply migrations and seed the featured picks, then exit. Kept out of the API so
+  # several API replicas never race each other on migrations (on AWS: a pipeline step or ECS task).
+  migrate:
+    build:
+      context: .
+      target: migrate
+    environment:
+      DATABASE_URL: *database-url
+    depends_on:
+      db:
+        condition: service_healthy
+    restart: 'no'
+
+  api:
+    build:
+      context: .
+      target: api
+    environment:
+      NODE_ENV: production
+      API_PORT: 3000
+      STORAGE: postgres
+      DATABASE_URL: *database-url
+      PRODUCT_SOURCE: ${PRODUCT_SOURCE:-fakestore}
+      FAKESTORE_BASE_URL: ${FAKESTORE_BASE_URL:-https://fakestoreapi.com}
+      CATALOG_CACHE_TTL_SECONDS: ${CATALOG_CACHE_TTL_SECONDS:-300}
+      MAILER: ${MAILER:-smtp}
+      SMTP_HOST: mailpit
+      SMTP_PORT: 1025
+      SMTP_SECURE: 'false'
+      MAIL_FROM: ${MAIL_FROM:-Catalogue <no-reply@catalogue.local>}
+      SALES_INBOX_EMAIL: ${SALES_INBOX_EMAIL:-sales@catalogue.local}
+      CORS_ORIGIN: http://localhost:${WEB_PORT:-8080}
+      ENQUIRY_RATE_LIMIT_PER_MIN: ${ENQUIRY_RATE_LIMIT_PER_MIN:-5}
+      # nginx (the web service) is the one proxy in front of the API.
+      TRUST_PROXY_HOPS: 1
+    # Not published to the host: the browser reaches the API through nginx at /api, as in production.
+    expose:
+      - '3000'
+    depends_on:
+      migrate:
+        condition: service_completed_successfully
+      mailpit:
+        condition: service_healthy
+    healthcheck:
+      test:
+        - CMD
+        - node
+        - -e
+        - "fetch('http://127.0.0.1:3000/health').then((r) => { process.exitCode = r.ok ? 0 : 1; }, () => { process.exitCode = 1; })"
+      interval: 5s
+      timeout: 3s
+      retries: 12
+      start_period: 5s
+
+  web:
+    build:
+      context: .
+      target: web
+    ports:
+      - '${WEB_PORT:-8080}:80'
+    depends_on:
+      api:
+        condition: service_healthy
+
+volumes:
+  db-data:

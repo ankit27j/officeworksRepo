@@ -1,0 +1,24 @@
+/* Resets only. Everything visual comes from the theme (src/theme) and component CSS Modules. */
+html,
+body,
+#root {
+  margin: 0;
+  min-height: 100%;
+}
+
+:root[data-theme='light'] {
+  color-scheme: light;
+}
+
+:root[data-theme='dark'] {
+  color-scheme: dark;
+}
+
+body {
+  /* System colour that follows color-scheme, so there's no white flash in dark mode before React paints. */
+  background: Canvas;
+}
+
+img {
+  max-width: 100%;
+}

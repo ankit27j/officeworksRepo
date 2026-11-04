@@ -1,0 +1,14 @@
+# Keep the build context small and never send secrets or host-built artefacts into an image.
+**/node_modules
+**/dist
+**/coverage
+**/*.tsbuildinfo
+**/*.log
+.env
+.env.*
+!.env.example
+.git
+.vscode
+.idea
+playwright-report
+test-results

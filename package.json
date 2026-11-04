@@ -1,0 +1,46 @@
+{
+  "name": "product-catalogue",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Product catalogue proof of concept: React + NestJS + PostgreSQL",
+  "workspaces": [
+    "packages/*",
+    "apps/*"
+  ],
+  "engines": {
+    "node": "^20.19.0 || >=22.12.0"
+  },
+  "overrides": {
+    "@nestjs/platform-express": {
+      "multer": "2.5.0"
+    }
+  },
+  "scripts": {
+    "build": "npm run build --workspaces --if-present",
+    "typecheck": "npm run typecheck --workspaces --if-present",
+    "test": "npm run test --workspaces --if-present",
+    "lint": "eslint . && npm run lint:css --workspaces --if-present",
+    "lint:fix": "eslint . --fix",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "dev": "node scripts/dev.mjs",
+    "dev:api": "npm run dev -w @catalogue/api",
+    "dev:web": "npm run dev -w @catalogue/web",
+    "dev:inbox": "npm run dev:inbox -w @catalogue/api",
+    "db:migrate": "npm run db:migrate -w @catalogue/api",
+    "db:seed": "npm run db:seed -w @catalogue/api",
+    "infra:up": "docker compose up -d db mailpit",
+    "infra:down": "docker compose down"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.13.0",
+    "eslint": "^9.13.0",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-plugin-react": "^7.37.2",
+    "eslint-plugin-react-hooks": "^5.0.0",
+    "globals": "^15.11.0",
+    "prettier": "^3.3.3",
+    "typescript": "^5.6.3",
+    "typescript-eslint": "^8.12.2"
+  }
+}
